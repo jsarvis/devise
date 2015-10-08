@@ -18,7 +18,7 @@ Warden::Manager.after_set_user do |record, warden, options|
 
     proxy = Devise::Hooks::Proxy.new(warden)
 
-    if record.timedout?(last_request_at) && !env['devise.skip_timeout']
+    if record.timedout?(last_request_at) && !env['devise.skip_timeout'] && !env["devise.credentials_present"]
       Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
 
       throw :warden, scope: scope, message: :timeout
